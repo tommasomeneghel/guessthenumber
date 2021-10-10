@@ -1,59 +1,59 @@
 'use strict';
 
-let secretNumber = 0;
+let secretNumber;
+let score;
 let highScore = 0;
-let score = 0;
+
+function newRandomNumber() {
+    return Math.floor(Math.random() * 20 + 1)
+}
 
 function init() {
-    secretNumber = newSecretNumber()
-    document.querySelector(".check").addEventListener("click", checkNumber, false)
     resetGame()
+    secretNumber = newRandomNumber()
+    document.querySelector(".check").addEventListener("click", checkNumber, false)
+    document.querySelector(".again").addEventListener("click", resetGame, false)
 }
 
 function checkNumber() {
     let number = +document.querySelector(".guess").value
-    if(secretNumber > number) {
-        document.querySelector(".message").innerHTML = "Troppo piccolo"
-        score--
-        updateScore()
-    } else if(secretNumber < number) {
-        document.querySelector(".message").innerHTML = "Troppo grande"
-        score--
-        updateScore()
+    let win = false
+    if(number == secretNumber) {
+        win = true 
     } else {
-        win()
+        if(number > secretNumber) {
+            document.querySelector(".message").innerHTML = "Troppo grande"
+        } else {
+            document.querySelector(".message").innerHTML = "Troppo piccolo"
+        }
     }
+    if(win) {
+        document.querySelector(".message").innerHTML = "Esatto"
+        document.querySelector(".number").style.backgroundColor = "green"
+        document.querySelector("h1").innerHTML = "Guessed my number!"
+        document.querySelector("h1").style.color = "green"
+
+    } else {
+        score--
+    }
+    updateScores()
+    if(win) {
+        setTimeout(2500, resetGame)
+    }
+}
+
+function updateScores() {
+    if(score > highScore) {
+        highScore = score
+    }
+    document.querySelector(".score").innerHTML = score
+    document.querySelector(".highscore").innerHTML = highScore
+
 }
 
 function resetGame() {
     score = 20
-    updateScore()
-    secretNumber = newSecretNumber()
-    document.querySelector("div.number").style.backgroundColor = "white"
-    document.querySelector(".message").innerHTML = "Start guessing..."
+    document.querySelector(".number").style.backgroundColor = "white"
+    document.querySelector("h1").innerHTML = "Guess my number!"
+    document.querySelector("h1").style.color = "white"
 }
-
-function win() {
-    document.querySelector(".message").innerHTML = "Esatto"
-    document.querySelector("div.number").style.backgroundColor = "green"
-    if(score > highScore) {
-        updateHighScore()
-    }
-    setTimeout(1500)
-    resetGame()
-}
-
-function updateScore() {
-    document.querySelector(".score").innerHTML = score
-}
-
-function updateHighScore() {
-    highScore = score
-    document.querySelector(".score").innerHTML = highScore
-}
-
-function newSecretNumber() {
-    return Math.floor(Math.random() * 20) + 1
-}
-
-init()
