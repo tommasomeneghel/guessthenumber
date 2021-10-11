@@ -9,10 +9,13 @@ function newRandomNumber() {
 }
 
 function init() {
-    resetGame()
+    score = 20
     secretNumber = newRandomNumber()
+    document.querySelector(".number").style.backgroundColor = "white"
+    document.querySelector("h1").innerHTML = "Guess my number!"
+    document.querySelector("h1").style.color = "white"
     document.querySelector(".check").addEventListener("click", checkNumber, false)
-    document.querySelector(".again").addEventListener("click", resetGame, false)
+    document.querySelector(".again").addEventListener("click", init, false)
 }
 
 function checkNumber() {
@@ -36,24 +39,16 @@ function checkNumber() {
     } else {
         score--
     }
-    updateScores()
+    updateScores(win)
     if(win) {
-        setTimeout(2500, resetGame)
+        setTimeout(2500, init)
     }
 }
 
-function updateScores() {
-    if(score > highScore) {
+function updateScores(win) {
+    if(score > highScore && win) {
         highScore = score
     }
     document.querySelector(".score").innerHTML = score
     document.querySelector(".highscore").innerHTML = highScore
-
-}
-
-function resetGame() {
-    score = 20
-    document.querySelector(".number").style.backgroundColor = "white"
-    document.querySelector("h1").innerHTML = "Guess my number!"
-    document.querySelector("h1").style.color = "white"
 }
